@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <title>Article</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="django-app">Django 6.03</h1>
+
+        {% for article in articles %}
+            <div class="card">
+                <h2>{{ article.title }}</h2>
+
+                {% if article.image %}
+                    <img class="rs6" src="{{ article.image.url }}" alt="{{ article.title }}">
+                {% endif %}
+
+                <p class="meta"><strong>Дата:</strong> {{ article.created_at|date:"d.m.Y H:i" }}</p>
+                <p class="meta_user"><strong>Автор:</strong> {{ article.author.username }}</p>
+                <p><strong>Описание:</strong> <span class="description">{{ article.description }}</span></p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
