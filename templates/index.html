@@ -4,26 +4,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-News</title>
+    <link rel="icon" href="{% static 'images/IT-K1.png' %}">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <title>Article</title>
 </head>
 <body>
+
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-block">
+                <img class="logo-icon" src="{% static 'images/IT-K1.png' %}" alt="Логотип">
+                <a href="/" class="logo-text">K-News</a>
+            </div>
+
+            <nav class="nav">
+                <a href="/">Главная</a>
+                <a href="#">Новости</a>
+                <a href="#">Образование</a>
+                <a href="#">Культура</a>
+                <a href="#">Политика</a>
+                <a href="#">Спорт</a>
+            </nav>
+
+            <div class="header-right">
+                <form class="search-form" method="get">
+                    <input type="text" name="q" placeholder="Поиск">
+                    <button type="submit">Найти</button>
+                </form>
+
+                <a href="/admin/" class="admin-link">Админка</a>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
         <h1 class="django-app">Django 6.03</h1>
 
         {% for article in articles %}
             <div class="card">
-                <h2>{{ article.title }}</h2>
+                <h2 class="title">{{ article.title }}</h2>
 
                 {% if article.image %}
                     <img class="rs6" src="{{ article.image.url }}" alt="{{ article.title }}">
+                {% else %}
+                    <img class="rs6" src="{% static 'images/no-image.jpg' %}" alt="Нет изображения">
                 {% endif %}
 
-                <p class="meta"><strong>Дата:</strong> {{ article.created_at|date:"d.m.Y H:i" }}</p>
-                <p class="meta_user"><strong>Автор:</strong> {{ article.author.username }}</p>
-                <p><strong>Описание:</strong> <span class="description">{{ article.description }}</span></p>
+                <p class="meta">
+                    <strong class="subtitle">Дата:</strong>
+                    {{ article.created_at|date:"d.m.Y H:i" }}
+                </p>
+
+                <p class="meta_user">
+                    <strong class="subtitle">Автор:</strong>
+                    {% if article.author %}
+                        {{ article.author.username }}
+                    {% else %}
+                        Не указан
+                    {% endif %}
+                </p>
+
+                <p class="meta_category">
+                    <strong class="subtitle">Категории:</strong>
+                    {% for cat in article.category.all %}
+                        {{ cat.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        Не указаны
+                    {% endfor %}
+                </p>
+
+                <p>
+                    <strong class="subtitle">Описание:</strong>
+                    <span class="description">{{ article.description }}</span>
+                </p>
             </div>
+        {% empty %}
+            <p class="empty">Статей пока нет.</p>
         {% endfor %}
     </div>
+
 </body>
 </html>

@@ -1,10 +1,16 @@
 from django.shortcuts import render
-from post.models import Article
+from .models import Article
+
 
 def index(request):
-    articles = Article.objects.all()
+    query = request.GET.get('q')
+
+    if query:
+        articles = Article.objects.filter(title__icontains=query)
+    else:
+        articles = Article.objects.all()
+
     context = {
-        'articles':articles
+        'articles': articles
     }
-        
     return render(request, 'index.html', context)

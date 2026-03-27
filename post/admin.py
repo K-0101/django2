@@ -1,4 +1,17 @@
 from django.contrib import admin
-from post.models import Article
+from .models import Article, Category
 
-admin.site.register(Article)
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    search_fields = ('name',)
+
+
+@admin.register(Article)
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'author', 'created_at')
+    list_display_links = ('id', 'title')
+    search_fields = ('title', 'description')
+    list_filter = ('created_at', 'author', 'category')
+    filter_horizontal = ('category',)
